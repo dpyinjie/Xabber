@@ -48,11 +48,11 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
         Application.getInstance().addManager(instance);
     }
 
+    private Map<String, String> uploadServers = new ConcurrentHashMap<>();
+
     public static HttpFileUploadManager getInstance() {
         return instance;
     }
-
-    private Map<String, String> uploadServers = new ConcurrentHashMap<>();
 
     public boolean isFileUploadSupported(String account) {
         return uploadServers.containsKey(account);
@@ -71,7 +71,6 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
         httpFileUpload.setSize(String.valueOf(file.length()));
         httpFileUpload.setTo(uploadServerUrl);
 
-
         try {
             ConnectionManager.getInstance().sendRequest(account, httpFileUpload, new OnResponseListener() {
                 @Override
@@ -79,10 +78,8 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                     if (!httpFileUpload.getStanzaId().equals(packetId) || !(iq instanceof Slot)) {
                         return;
                     }
-
                     uploadFileToSlot(account, (Slot) iq);
                 }
-
 
                 private void uploadFileToSlot(final String account, final Slot slot) {
                     AsyncHttpClient client = new AsyncHttpClient();
@@ -90,7 +87,6 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                     client.setResponseTimeout(60 * 1000);
 
                     FileEntity fileEntity = new FileEntity(file, ContentType.DEFAULT_BINARY);
-
 
                     LogManager.i(this, "fileEntity.getContentLength() " + fileEntity.getContentLength());
 
@@ -102,7 +98,6 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                         public void onStart() {
                             super.onStart();
                             LogManager.i(this, "uploadFileToSlot onStart");
-
                             fileMessage = MessageManager.getInstance().createFileMessage(account, user, file);
                         }
 
@@ -110,7 +105,6 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                         public void onSuccess(int i, Header[] headers, byte[] bytes) {
                             LogManager.i(this, "uploadFileToSlot onSuccess " + i);
                             MessageManager.getInstance().replaceMessage(account, user, fileMessage, slot.getGetUrl());
-
                             if (FileManager.fileIsImage(file)) {
                                 saveImageToCache(slot.getGetUrl(), file);
                             }
@@ -119,9 +113,7 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                         @Override
                         public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
                             LogManager.i(this, "uploadFileToSlot onFailure " + i);
-
                             MessageManager.getInstance().updateMessageWithError(account, user, fileMessage, file.getName());
-
                         }
 
                         @Override
@@ -133,9 +125,7 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                         @Override
                         public void onCancel() {
                             super.onCancel();
-
                             LogManager.i(this, "uploadFileToSlot onCancel");
-
                         }
 
                         @Override
@@ -143,8 +133,6 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
                             super.onFinish();
                             LogManager.i(this, "uploadFileToSlot onFinish");
                         }
-
-
                     });
                 }
 
@@ -191,8 +179,8 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
         });
     }
 
-    private void discoverSupport(XMPPConnection xmppConnection) throws SmackException.NotConnectedException,
-            XMPPException.XMPPErrorException, SmackException.NoResponseException {
+    private void discoverSupport(XMPPConnection xmppConnection) throws
+            SmackException.NotConnectedException, XMPPException.XMPPErrorException, SmackException.NoResponseException {
 
         final String account = xmppConnection.getUser();
 

@@ -51,11 +51,7 @@ public class FileManager {
     public static final String[] VALID_CRYPTO_EXTENSIONS = {"pgp", "gpg", "otr"};
 
     private static final String CACHE_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath()
-            + "/"  +  Application.getInstance().getString(R.string.application_title_short) + "/Cache/";
-
-
-    private Set<String> startedDownloads;
-
+            + "/" + Application.getInstance().getString(R.string.application_title_short) + "/Cache/";
     private final static FileManager instance;
 
     static {
@@ -63,15 +59,17 @@ public class FileManager {
         Application.getInstance().addManager(instance);
     }
 
-    public static FileManager getInstance() {
-        return instance;
-    }
+    private Set<String> startedDownloads;
 
     public FileManager() {
         this.startedDownloads = new ConcurrentSkipListSet<>();
     }
 
-    public static void processFileMessage (final MessageItem messageItem, boolean download) {
+    public static FileManager getInstance() {
+        return instance;
+    }
+
+    public static void processFileMessage(final MessageItem messageItem, boolean download) {
         if (!treatAsDownloadable(messageItem.getText())) {
             return;
         }
@@ -130,60 +128,6 @@ public class FileManager {
         });
     }
 
-
-    public interface ProgressListener {
-        void onProgress(long bytesWritten, long totalSize);
-        void onFinish(long totalSize);
-    }
-
-
-    public void downloadFile(final MessageItem messageItem, final ProgressListener progressListener) {
-        final String downloadUrl = messageItem.getText();
-        if (startedDownloads.contains(downloadUrl)) {
-            LogManager.i(FileManager.class, "Downloading of file " + downloadUrl + " already started");
-            return;
-        }
-        LogManager.i(FileManager.class, "Downloading file " + downloadUrl);
-        startedDownloads.add(downloadUrl);
-
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.setLoggingEnabled(SettingsManager.debugLog());
-        client.setResponseTimeout(60 * 1000);
-
-        client.get(downloadUrl, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                super.onStart();
-                LogManager.i(FileManager.class, "on download start");
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
-                LogManager.i(FileManager.class, "on download onSuccess: " + statusCode);
-                saveFile(responseBody, messageItem.getFile(), progressListener);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                LogManager.i(FileManager.class, "on download onFailure: " + statusCode);
-
-            }
-
-            @Override
-            public void onProgress(long bytesWritten, long totalSize) {
-                if (progressListener != null) {
-                    progressListener.onProgress(bytesWritten, totalSize);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                startedDownloads.remove(downloadUrl);
-            }
-        });
-    }
-
     private static void saveFile(final byte[] responseBody, final File file, final ProgressListener progressListener) {
         LogManager.i(FileManager.class, "Saving file " + file.getPath());
 
@@ -222,10 +166,10 @@ public class FileManager {
         return Arrays.asList(VALID_IMAGE_EXTENSIONS).contains(extension);
     }
 
-
     public static String getFileName(String path) {
         return path.substring(path.lastIndexOf('/') + 1).toLowerCase();
     }
+
     public static void openFile(Context context, File file) {
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(file), getFileMimeType(file));
@@ -316,71 +260,12 @@ public class FileManager {
             String extension = filename.substring(dotPosition + 1).toLowerCase();
             // we want the real file extension, not the crypto one
             if (Arrays.asList(VALID_CRYPTO_EXTENSIONS).contains(extension)) {
-                return extractRelevantExtension(path.substring(0,dotPosition));
+                return extractRelevantExtension(path.substring(0, dotPosition));
             } else {
                 return extension;
             }
         }
         return null;
-    }
-
-    private static class ImageScaler {
-        private Context context;
-        private int height;
-        private int width;
-        private int scaledWidth;
-        private int scaledHeight;
-
-        public ImageScaler(Context context, int height, int width) {
-            this.context = context;
-            this.height = height;
-            this.width = width;
-        }
-
-        public int getScaledWidth() {
-            return scaledWidth;
-        }
-
-        public int getScaledHeight() {
-            return scaledHeight;
-        }
-
-        public ImageScaler invoke() {
-            Resources resources = context.getResources();
-            final int maxImageSize = resources.getDimensionPixelSize(R.dimen.max_chat_image_size);
-            final int minImageSize = resources.getDimensionPixelSize(R.dimen.min_chat_image_size);
-
-            if (width <= height) {
-                if (height > maxImageSize) {
-                    scaledWidth = (int) (width / ((double) height / maxImageSize));
-                    scaledHeight = maxImageSize;
-                } else if (width < minImageSize) {
-                    scaledWidth = minImageSize;
-                    scaledHeight = (int) (height / ((double) width / minImageSize));
-                    if (scaledHeight > maxImageSize) {
-                        scaledHeight = maxImageSize;
-                    }
-                } else {
-                    scaledWidth = width;
-                    scaledHeight = height;
-                }
-            } else {
-                if (width > maxImageSize) {
-                    scaledWidth = maxImageSize;
-                    scaledHeight = (int) (height / ((double) width / maxImageSize));
-                } else if (height < minImageSize) {
-                    scaledWidth = (int) (width / ((double) height / minImageSize));
-                    if (scaledWidth > maxImageSize) {
-                        scaledWidth = maxImageSize;
-                    }
-                    scaledHeight = minImageSize;
-                } else {
-                    scaledWidth = width;
-                    scaledHeight = height;
-                }
-            }
-            return this;
-        }
     }
 
     public static void saveFileToDownloads(File srcFile) throws IOException {
@@ -513,6 +398,118 @@ public class FileManager {
                 ".jpg",         /* suffix */
                 Application.getInstance().getExternalFilesDir(null)      /* directory */
         );
+    }
+
+    public void downloadFile(final MessageItem messageItem, final ProgressListener progressListener) {
+        final String downloadUrl = messageItem.getText();
+        if (startedDownloads.contains(downloadUrl)) {
+            LogManager.i(FileManager.class, "Downloading of file " + downloadUrl + " already started");
+            return;
+        }
+        LogManager.i(FileManager.class, "Downloading file " + downloadUrl);
+        startedDownloads.add(downloadUrl);
+
+        final AsyncHttpClient client = new AsyncHttpClient();
+        client.setLoggingEnabled(SettingsManager.debugLog());
+        client.setResponseTimeout(60 * 1000);
+
+        client.get(downloadUrl, new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                LogManager.i(FileManager.class, "on download start");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, final byte[] responseBody) {
+                LogManager.i(FileManager.class, "on download onSuccess: " + statusCode);
+                saveFile(responseBody, messageItem.getFile(), progressListener);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                LogManager.i(FileManager.class, "on download onFailure: " + statusCode);
+
+            }
+
+            @Override
+            public void onProgress(long bytesWritten, long totalSize) {
+                if (progressListener != null) {
+                    progressListener.onProgress(bytesWritten, totalSize);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                startedDownloads.remove(downloadUrl);
+            }
+        });
+    }
+
+    public interface ProgressListener {
+        void onProgress(long bytesWritten, long totalSize);
+
+        void onFinish(long totalSize);
+    }
+
+    private static class ImageScaler {
+        private Context context;
+        private int height;
+        private int width;
+        private int scaledWidth;
+        private int scaledHeight;
+
+        public ImageScaler(Context context, int height, int width) {
+            this.context = context;
+            this.height = height;
+            this.width = width;
+        }
+
+        public int getScaledWidth() {
+            return scaledWidth;
+        }
+
+        public int getScaledHeight() {
+            return scaledHeight;
+        }
+
+        public ImageScaler invoke() {
+            Resources resources = context.getResources();
+            final int maxImageSize = resources.getDimensionPixelSize(R.dimen.max_chat_image_size);
+            final int minImageSize = resources.getDimensionPixelSize(R.dimen.min_chat_image_size);
+
+            if (width <= height) {
+                if (height > maxImageSize) {
+                    scaledWidth = (int) (width / ((double) height / maxImageSize));
+                    scaledHeight = maxImageSize;
+                } else if (width < minImageSize) {
+                    scaledWidth = minImageSize;
+                    scaledHeight = (int) (height / ((double) width / minImageSize));
+                    if (scaledHeight > maxImageSize) {
+                        scaledHeight = maxImageSize;
+                    }
+                } else {
+                    scaledWidth = width;
+                    scaledHeight = height;
+                }
+            } else {
+                if (width > maxImageSize) {
+                    scaledWidth = maxImageSize;
+                    scaledHeight = (int) (height / ((double) width / maxImageSize));
+                } else if (height < minImageSize) {
+                    scaledWidth = (int) (width / ((double) height / minImageSize));
+                    if (scaledWidth > maxImageSize) {
+                        scaledWidth = maxImageSize;
+                    }
+                    scaledHeight = minImageSize;
+                } else {
+                    scaledWidth = width;
+                    scaledHeight = height;
+                }
+            }
+            return this;
+        }
     }
 
 }
