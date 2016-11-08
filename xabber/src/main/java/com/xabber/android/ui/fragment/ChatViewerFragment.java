@@ -85,19 +85,23 @@ import github.ankushsachdeva.emojicon.EmojiconGridView;
 import github.ankushsachdeva.emojicon.EmojiconsPopup;
 import github.ankushsachdeva.emojicon.emoji.Emojicon;
 
-public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItemClickListener,
-        View.OnClickListener, Toolbar.OnMenuItemClickListener,
-        ChatMessageAdapter.Message.MessageClickListener, HttpUploadListener, ChatMessageAdapter.Listener {
+public class ChatViewerFragment extends Fragment implements
+        PopupMenu.OnMenuItemClickListener,
+        View.OnClickListener,
+        Toolbar.OnMenuItemClickListener,
+        ChatMessageAdapter.Message.MessageClickListener,
+        HttpUploadListener,
+        ChatMessageAdapter.Listener {
 
     public static final String ARGUMENT_ACCOUNT = "ARGUMENT_ACCOUNT";
     public static final String ARGUMENT_USER = "ARGUMENT_USER";
-
-    private static final int MINIMUM_MESSAGES_TO_LOAD = 10;
     public static final int FILE_SELECT_ACTIVITY_REQUEST_CODE = 23;
+    private static final int MINIMUM_MESSAGES_TO_LOAD = 10;
     private static final int PERMISSIONS_REQUEST_ATTACH_FILE = 24;
     private static final int PERMISSIONS_REQUEST_SAVE_TO_DOWNLOADS = 25;
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 26;
     private static final int PERMISSIONS_REQUEST_EXPORT_CHAT = 27;
+    private final long STOP_TYPING_DELAY = 4000; // in ms
     boolean isInputEmpty = true;
     private EditText inputView;
     private ChatMessageAdapter chatMessageAdapter;
@@ -107,7 +111,6 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
     private ImageButton sendButton;
     private ImageButton securityButton;
     private Toolbar toolbar;
-
     private ChatViewerFragmentListener listener;
     private Animation shakeAnimation = null;
     private RecyclerView recyclerView;
@@ -115,14 +118,11 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
     private AbstractContact abstractContact;
     private LinearLayoutManager layoutManager;
     private MessageItem clickedMessageItem;
-
     private Timer stopTypingTimer = new Timer();
-    private final long STOP_TYPING_DELAY = 4000; // in ms
     private ImageButton attachButton;
 
     public static ChatViewerFragment newInstance(String account, String user) {
         ChatViewerFragment fragment = new ChatViewerFragment();
-
         Bundle arguments = new Bundle();
         arguments.putString(ARGUMENT_ACCOUNT, account);
         arguments.putString(ARGUMENT_USER, user);
@@ -133,7 +133,6 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         try {
             listener = (ChatViewerFragmentListener) activity;
         } catch (ClassCastException e) {
@@ -145,7 +144,6 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Bundle args = getArguments();
         account = args.getString(ARGUMENT_ACCOUNT, null);
         user = args.getString(ARGUMENT_USER, null);
@@ -156,7 +154,6 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.chat_viewer_fragment, container, false);
-
 
         contactTitleView = view.findViewById(R.id.contact_title);
 
@@ -345,16 +342,16 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
             public void onClick(View v) {
 
                 //If popup is not showing => emoji keyboard is not visible, we need to show it
-                if(!popup.isShowing()){
+                if (!popup.isShowing()) {
 
                     //If keyboard is visible, simply show the emoji popup
-                    if(popup.isKeyBoardOpen()){
+                    if (popup.isKeyBoardOpen()) {
                         popup.showAtBottom();
                         changeEmojiKeyboardIcon(emojiButton, R.drawable.ic_keyboard_black_24dp);
                     }
 
                     //else, open the text keyboard first and immediately after that show the emoji popup
-                    else{
+                    else {
                         inputView.setFocusableInTouchMode(true);
                         inputView.requestFocus();
                         popup.showAtBottomPending();
@@ -365,7 +362,7 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
                 }
 
                 //If popup is showing, simply dismiss it to show the undelying text keyboard
-                else{
+                else {
                     popup.dismiss();
                 }
             }
@@ -399,28 +396,28 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_ATTACH_FILE :
+            case PERMISSIONS_REQUEST_ATTACH_FILE:
                 if (PermissionsRequester.isPermissionGranted(grantResults)) {
                     startFileSelection();
                 } else {
                     onNoReadPermissionError();
                 }
                 break;
-            case PERMISSIONS_REQUEST_SAVE_TO_DOWNLOADS :
+            case PERMISSIONS_REQUEST_SAVE_TO_DOWNLOADS:
                 if (PermissionsRequester.isPermissionGranted(grantResults)) {
                     saveFileToDownloads();
                 } else {
                     onNoWritePermissionError();
                 }
                 break;
-            case PERMISSIONS_REQUEST_EXPORT_CHAT :
+            case PERMISSIONS_REQUEST_EXPORT_CHAT:
                 if (PermissionsRequester.isPermissionGranted(grantResults)) {
                     showExportChatDialog();
                 } else {
                     onNoWritePermissionError();
                 }
                 break;
-            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE :
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
                 if (!PermissionsRequester.isPermissionGranted(grantResults)) {
                     onNoWritePermissionError();
                 }
@@ -463,7 +460,7 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
         HttpFileUploadManager.getInstance().uploadFile(account, user, path);
     }
 
-    private void changeEmojiKeyboardIcon(ImageView iconToBeChanged, int drawableResourceId){
+    private void changeEmojiKeyboardIcon(ImageView iconToBeChanged, int drawableResourceId) {
         iconToBeChanged.setImageResource(drawableResourceId);
     }
 
@@ -531,7 +528,6 @@ public class ChatViewerFragment extends Fragment implements PopupMenu.OnMenuItem
             attachButton.setVisibility(View.GONE);
         }
     }
-
 
 
     public void restoreInputState() {

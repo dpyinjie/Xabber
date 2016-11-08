@@ -414,6 +414,7 @@ public class FileManager {
         client.setResponseTimeout(60 * 1000);
 
         client.get(downloadUrl, new AsyncHttpResponseHandler() {
+
             @Override
             public void onStart() {
                 super.onStart();
@@ -429,7 +430,6 @@ public class FileManager {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 LogManager.i(FileManager.class, "on download onFailure: " + statusCode);
-
             }
 
             @Override
