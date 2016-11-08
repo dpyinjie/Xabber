@@ -602,8 +602,8 @@ public abstract class AbstractChat extends BaseEntity {
     protected void sendQueue(MessageItem intent) {
         if (!canSendMessage())
             return;
-        final ArrayList<MessageItem> sentMessages = new ArrayList<MessageItem>();
-        final ArrayList<MessageItem> removeMessages = new ArrayList<MessageItem>();
+        final ArrayList<MessageItem> sentMessages = new ArrayList<>();
+        final ArrayList<MessageItem> removeMessages = new ArrayList<>();
         for (final MessageItem messageItem : sendQuery) {
             String text = prepareText(messageItem.getText());
             if (text == null) {
@@ -617,13 +617,10 @@ public abstract class AbstractChat extends BaseEntity {
                 });
             } else {
                 Message message = createMessagePacket(text);
-                messageItem.setPacketID(message.getPacketID());
-                ChatStateManager.getInstance().updateOutgoingMessage(this,
-                        message);
-                ReceiptManager.getInstance().updateOutgoingMessage(this,
-                        message, messageItem);
-                CarbonManager.getInstance().updateOutgoingMessage(this,
-                        message, messageItem);
+                messageItem.setPacketID(message.getStanzaId());
+                ChatStateManager.getInstance().updateOutgoingMessage(this, message);
+                ReceiptManager.getInstance().updateOutgoingMessage(this, message, messageItem);
+                CarbonManager.getInstance().updateOutgoingMessage(this, message, messageItem);
                 if (messageItem != intent)
                     message.addExtension(new DelayInformation(messageItem.getTimestamp()));
                 try {
@@ -650,10 +647,8 @@ public abstract class AbstractChat extends BaseEntity {
         Application.getInstance().runInBackground(new Runnable() {
             @Override
             public void run() {
-                Collection<Long> sentIds = MessageManager.getMessageIds(
-                        sentMessages, false);
-                Collection<Long> removeIds = MessageManager.getMessageIds(
-                        removeMessages, true);
+                Collection<Long> sentIds = MessageManager.getMessageIds(sentMessages, false);
+                Collection<Long> removeIds = MessageManager.getMessageIds(removeMessages, true);
                 MessageTable.getInstance().markAsSent(sentIds);
                 MessageTable.getInstance().removeMessages(removeIds);
             }

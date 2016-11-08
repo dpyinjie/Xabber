@@ -36,6 +36,7 @@ public class MessageItem implements Comparable<MessageItem> {
      * Text representation.
      */
     private final String text;
+
     /**
      * Optional action. If set message represent not an actual message but some
      * action in the chat.

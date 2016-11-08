@@ -268,10 +268,8 @@ public class ChatViewerFragment extends Fragment implements
 
         });
 
-
         final ImageButton emojiButton = (ImageButton) view.findViewById(R.id.button_emoticon);
         final View rootView = view.findViewById(R.id.root_view);
-
 
         // Give the topmost view of your activity layout hierarchy. This will be used to measure soft keyboard height
         final EmojiconsPopup popup = new EmojiconsPopup(rootView, getActivity());
@@ -293,7 +291,6 @@ public class ChatViewerFragment extends Fragment implements
 
             @Override
             public void onKeyboardOpen(int keyBoardHeight) {
-
             }
 
             @Override
@@ -329,8 +326,7 @@ public class ChatViewerFragment extends Fragment implements
 
             @Override
             public void onEmojiconBackspaceClicked(View v) {
-                KeyEvent event = new KeyEvent(
-                        0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
+                KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
                 inputView.dispatchKeyEvent(event);
             }
         });
