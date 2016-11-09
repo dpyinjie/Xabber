@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
@@ -58,8 +58,10 @@ import java.util.Map;
  *
  * @author alexander.ivanov
  */
-public class ChatStateManager implements OnDisconnectListener,
-        OnPacketListener, OnCloseListener {
+public class ChatStateManager implements
+        OnDisconnectListener,
+        OnPacketListener,
+        OnCloseListener {
 
     private final static ChatStateManager instance;
 
@@ -72,64 +74,57 @@ public class ChatStateManager implements OnDisconnectListener,
         Application.getInstance().addManager(instance);
 
         XMPPConnectionRegistry.addConnectionCreationListener(new ConnectionCreationListener() {
-                    @Override
-                    public void connectionCreated(final XMPPConnection connection) {
-                        ServiceDiscoveryManager.getInstanceFor(connection)
-                                .addFeature("http://jabber.org/protocol/chatstates");
-                    }
-                });
-    }
-
-    public static ChatStateManager getInstance() {
-        return instance;
+            @Override
+            public void connectionCreated(final XMPPConnection connection) {
+                ServiceDiscoveryManager.getInstanceFor(connection)
+                        .addFeature("http://jabber.org/protocol/chatstates");
+            }
+        });
     }
 
     /**
      * Chat states for lower cased resource for bareAddress in account.
      */
     private final NestedNestedMaps<String, ChatState> chatStates;
-
     /**
      * Cleaners for chat states for lower cased resource for bareAddress in
      * account.
      */
     private final NestedNestedMaps<String, Runnable> stateCleaners;
-
     /**
      * Information about chat state notification support for lower cased
      * resource for bareAddress in account.
      */
     private final NestedNestedMaps<String, Boolean> supports;
-
     /**
      * Sent chat state notifications for bareAddress in account.
      */
     private final NestedMap<ChatState> sent;
-
     /**
      * Scheduled pause intents for bareAddress in account.
      */
     private final NestedMap<PendingIntent> pauseIntents;
-
     /**
      * Alarm manager.
      */
     private final AlarmManager alarmManager;
-
     /**
      * Handler for clear states on timeout.
      */
     private final Handler handler;
 
     private ChatStateManager() {
-        chatStates = new NestedNestedMaps<String, ChatState>();
-        stateCleaners = new NestedNestedMaps<String, Runnable>();
-        supports = new NestedNestedMaps<String, Boolean>();
-        sent = new NestedMap<ChatState>();
-        pauseIntents = new NestedMap<PendingIntent>();
-        alarmManager = (AlarmManager) Application.getInstance()
-                .getSystemService(Context.ALARM_SERVICE);
+        chatStates = new NestedNestedMaps<>();
+        stateCleaners = new NestedNestedMaps<>();
+        supports = new NestedNestedMaps<>();
+        sent = new NestedMap<>();
+        pauseIntents = new NestedMap<>();
+        alarmManager = (AlarmManager) Application.getInstance().getSystemService(Context.ALARM_SERVICE);
         handler = new Handler();
+    }
+
+    public static ChatStateManager getInstance() {
+        return instance;
     }
 
     /**

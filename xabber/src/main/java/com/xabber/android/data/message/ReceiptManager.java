@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
@@ -42,11 +42,6 @@ import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
  */
 public class ReceiptManager implements OnPacketListener, OnDisconnectListener, ReceiptReceivedListener {
 
-    /**
-     * Sent messages for packet ids in accounts.
-     */
-    private final NestedMap<MessageItem> sent;
-
     private final static ReceiptManager instance;
 
     static {
@@ -58,9 +53,10 @@ public class ReceiptManager implements OnPacketListener, OnDisconnectListener, R
 
     }
 
-    public static ReceiptManager getInstance() {
-        return instance;
-    }
+    /**
+     * Sent messages for packet ids in accounts.
+     */
+    private final NestedMap<MessageItem> sent;
 
     private ReceiptManager() {
         sent = new NestedMap<>();
@@ -73,6 +69,10 @@ public class ReceiptManager implements OnPacketListener, OnDisconnectListener, R
             }
         });
 
+    }
+
+    public static ReceiptManager getInstance() {
+        return instance;
     }
 
     /**

@@ -26,8 +26,8 @@ import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 
 /**
  * Packet extension for XEP-0280: Message Carbons. This class implements
- * the manager for registering {@link Carbon} support, enabling and disabling
- * message carbons.
+ * the manager for registering {@link org.jivesoftware.smackx.carbons.packet.Carbon} support,
+ * enabling and disabling message carbons.
  * <p/>
  * You should call enableCarbons() before sending your first undirected
  * presence.
@@ -35,6 +35,7 @@ import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
  * @author Georg Lukas, Semyon Baranov
  */
 public class CarbonManager implements OnServerInfoReceivedListener, OnPacketListener {
+
     public static final String NAMESPACE = "urn:xmpp:carbons:2";
     private final static CarbonManager instance;
 
@@ -77,7 +78,6 @@ public class CarbonManager implements OnServerInfoReceivedListener, OnPacketList
      * @param msg Message object to mark private
      */
     public static void disableCarbons(Message msg) {
-
         msg.addExtension(new Private());
     }
 
@@ -221,7 +221,6 @@ public class CarbonManager implements OnServerInfoReceivedListener, OnPacketList
         }
         Message forwardedMsg = (Message) forwarded.getForwardedPacket();
         MessageManager.getInstance().displayForwardedMessage(connection, forwardedMsg, dir);
-
     }
 
     @Override
@@ -259,8 +258,7 @@ public class CarbonManager implements OnServerInfoReceivedListener, OnPacketList
         if (SettingsManager.securityOtrMode() == SecurityOtrMode.disabled) {
             return;
         }
-        if (OTRManager.getInstance().getSecurityLevel(abstractChat.getAccount(),
-                abstractChat.getUser()) != SecurityLevel.plain) {
+        if (OTRManager.getInstance().getSecurityLevel(abstractChat.getAccount(), abstractChat.getUser()) != SecurityLevel.plain) {
             return;
         }
         message.addExtension(new Private());
