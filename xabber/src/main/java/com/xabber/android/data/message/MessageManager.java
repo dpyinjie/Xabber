@@ -606,8 +606,6 @@ public class MessageManager implements OnLoadListener, OnPacketListener, OnDisco
                     }
                 }
             }
-
-
             return;
         }
         if (!processed && packet instanceof Message) {

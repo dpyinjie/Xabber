@@ -375,6 +375,30 @@ public class ChatViewerFragment extends Fragment implements
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        listener.registerChat(this);
+        updateChat();
+        restoreInputState();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ChatStateManager.getInstance().onPaused(account, user);
+
+        saveInputState();
+        listener.unregisterChat(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
     private void onAttachButtonPressed() {
         if (PermissionsRequester.requestFileReadPermissionIfNeeded(this, PERMISSIONS_REQUEST_ATTACH_FILE)) {
             startFileSelection();
@@ -460,20 +484,6 @@ public class ChatViewerFragment extends Fragment implements
         iconToBeChanged.setImageResource(drawableResourceId);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        listener.registerChat(this);
-        updateChat();
-        restoreInputState();
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
 
     private void showSecurityMenu() {
         PopupMenu popup = new PopupMenu(getActivity(), securityButton);
@@ -538,16 +548,6 @@ public class ChatViewerFragment extends Fragment implements
         if (!inputView.getText().toString().isEmpty()) {
             inputView.requestFocus();
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        ChatStateManager.getInstance().onPaused(account, user);
-
-        saveInputState();
-        listener.unregisterChat(this);
     }
 
     public void saveInputState() {
@@ -753,7 +753,7 @@ public class ChatViewerFragment extends Fragment implements
                 MUCManager.getInstance().joinRoom(account, user, true);
                 return true;
 
-            case R.id.action_invite_to_chat:
+            case R.id.action_invite_to_chat://邀请加入聊天
                 startActivity(ContactList.createRoomInviteIntent(getActivity(), account, user));
                 return true;
 

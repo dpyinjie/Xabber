@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
@@ -428,7 +428,7 @@ public class ContactList extends ManagedActivity implements OnAccountChangedList
 
     private void hideKeyboard() {
         if (getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager)  getSystemService(INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
@@ -609,7 +609,7 @@ public class ContactList extends ManagedActivity implements OnAccountChangedList
             return;
         }
         switch (action) {
-            case ACTION_ROOM_INVITE: {
+            case ACTION_ROOM_INVITE: {//邀请加入聊天
                 action = null;
                 Intent intent = getIntent();
                 String account = getRoomInviteAccount(intent);
@@ -679,13 +679,13 @@ public class ContactList extends ManagedActivity implements OnAccountChangedList
             bitmap = AvatarManager.getInstance().getUserBitmap(abstractContact.getUser());
         }
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,
-                    AvatarManager.getInstance().createShortcutBitmap(bitmap));
+                AvatarManager.getInstance().createShortcutBitmap(bitmap));
         setResult(RESULT_OK, intent);
     }
 
     @Override
     public void onAccountsChanged(Collection<String> accounts) {
-        ((ContactListFragment)getSupportFragmentManager().findFragmentById(R.id.container)).onAccountsChanged();
+        ((ContactListFragment) getSupportFragmentManager().findFragmentById(R.id.container)).onAccountsChanged();
         barPainter.setDefaultColor();
     }
 
@@ -695,7 +695,7 @@ public class ContactList extends ManagedActivity implements OnAccountChangedList
     }
 
     private void rebuildAccountToggle() {
-        ((ContactListFragment)getSupportFragmentManager().findFragmentById(R.id.container)).rebuild();
+        ((ContactListFragment) getSupportFragmentManager().findFragmentById(R.id.container)).rebuild();
     }
 
     @Override

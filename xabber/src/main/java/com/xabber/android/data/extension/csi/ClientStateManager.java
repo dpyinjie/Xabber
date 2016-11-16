@@ -6,12 +6,12 @@ import com.xabber.android.data.connection.ConnectionThread;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.PlainStreamElement;
 import org.jivesoftware.smackx.csi.packet.ClientStateIndication;
 
 /**
  * Client State Indication (XEP-0352) manager
+ *
  * @author Ricki Hirner (www.bitfire.at)
  */
 public class ClientStateManager {

@@ -50,7 +50,7 @@ public class OccupantListAdapter extends BaseAdapter implements UpdatableAdapter
         this.activity = activity;
         this.account = account;
         this.room = room;
-        occupants = new ArrayList<Occupant>();
+        occupants = new ArrayList<>();
     }
 
     @Override

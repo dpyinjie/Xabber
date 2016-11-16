@@ -58,10 +58,7 @@ import java.util.Map;
  *
  * @author alexander.ivanov
  */
-public class ChatStateManager implements
-        OnDisconnectListener,
-        OnPacketListener,
-        OnCloseListener {
+public class ChatStateManager implements OnDisconnectListener, OnPacketListener, OnCloseListener {
 
     private final static ChatStateManager instance;
 
