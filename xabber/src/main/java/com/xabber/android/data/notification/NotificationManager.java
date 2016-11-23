@@ -238,8 +238,8 @@ public class NotificationManager implements OnInitializedListener, OnAccountChan
      * @param provider
      * @param notify   Ticker to be shown. Can be <code>null</code>.
      */
-    public <T extends NotificationItem> void updateNotifications(
-            NotificationProvider<T> provider, T notify) {
+    public <T extends NotificationItem> void updateNotifications(NotificationProvider<T> provider, T notify) {
+
         int id = providers.indexOf(provider);
 
         if (id == -1) {

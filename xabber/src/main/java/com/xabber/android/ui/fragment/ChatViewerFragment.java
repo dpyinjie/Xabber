@@ -749,7 +749,7 @@ public class ChatViewerFragment extends Fragment implements
 
             /* conference specific options menu */
 
-            case R.id.action_join_conference:
+            case R.id.action_join_conference://加入会议
                 MUCManager.getInstance().joinRoom(account, user, true);
                 return true;
 

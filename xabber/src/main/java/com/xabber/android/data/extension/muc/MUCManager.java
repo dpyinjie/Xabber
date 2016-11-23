@@ -478,8 +478,7 @@ public class MUCManager implements OnLoadListener, OnPacketListener {
             if (inviter == null) {
                 inviter = bareAddress;
             }
-            inviteProvider.add(new RoomInvite(account, bareAddress, inviter,
-                    mucUser.getInvite().getReason(), mucUser.getPassword()), true);
+            inviteProvider.add(new RoomInvite(account, bareAddress, inviter, mucUser.getInvite().getReason(), mucUser.getPassword()), true);
         }
     }
 

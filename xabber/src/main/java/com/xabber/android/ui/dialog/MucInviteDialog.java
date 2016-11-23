@@ -13,6 +13,9 @@ import com.xabber.android.data.roster.RosterManager;
 import com.xabber.android.ui.activity.ConferenceAdd;
 import com.xabber.xmpp.address.Jid;
 
+/**
+ * 群聊邀请对话框
+ */
 public class MucInviteDialog extends BaseContactDialog {
 
     private RoomInvite roomInvite;
@@ -70,9 +73,9 @@ public class MucInviteDialog extends BaseContactDialog {
 
         final AbstractContact bestContact = RosterManager.getInstance().getBestContact(getAccount(), inviter);
 
-        ((ImageView)view.findViewById(R.id.avatar)).setImageDrawable(bestContact.getAvatar());
-        ((TextView)view.findViewById(R.id.name)).setText(bestContact.getName());
-        ((TextView)view.findViewById(R.id.status_text)).setText(inviter);
+        ((ImageView) view.findViewById(R.id.avatar)).setImageDrawable(bestContact.getAvatar());
+        ((TextView) view.findViewById(R.id.name)).setText(bestContact.getName());
+        ((TextView) view.findViewById(R.id.status_text)).setText(inviter);
     }
 
 }

@@ -579,13 +579,10 @@ public class MessageManager implements OnLoadListener, OnPacketListener, OnDisco
 
         if (packet instanceof Message) {
             Message message = (Message) packet;
-            if (MUCManager.getInstance().hasRoom(account, bareAddress)
-                    && message.getType() != Message.Type.groupchat ) {
+            if (MUCManager.getInstance().hasRoom(account, bareAddress) && message.getType() != Message.Type.groupchat ) {
                 contact = packet.getFrom();
             }
         }
-
-
 
         final String user = packet.getFrom();
         boolean processed = false;
@@ -608,6 +605,7 @@ public class MessageManager implements OnLoadListener, OnPacketListener, OnDisco
             }
             return;
         }
+
         if (!processed && packet instanceof Message) {
             final Message message = (Message) packet;
             final String body = message.getBody();

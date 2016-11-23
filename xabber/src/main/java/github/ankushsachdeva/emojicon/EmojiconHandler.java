@@ -28,8 +28,6 @@ import com.xabber.android.R;
  * @author Hieu Rocker (rockerhieu@gmail.com)
  */
 public final class EmojiconHandler {
-    private EmojiconHandler() {
-    }
 
     private static final SparseIntArray sEmojisMap = new SparseIntArray(846);
     private static final SparseIntArray sSoftbanksMap = new SparseIntArray(471);
@@ -1364,6 +1362,9 @@ public final class EmojiconHandler {
         sSoftbanksMap.put(0xe537, R.drawable.emoji_2122);
     }
 
+    private EmojiconHandler() {
+    }
+
     private static boolean isSoftBankEmoji(char c) {
         return ((c >> 12) == 0xe);
     }
@@ -1399,7 +1400,7 @@ public final class EmojiconHandler {
     public static void addEmojis(Context context, Spannable text, int emojiSize, int index, int length) {
         int textLength = text.length();
         int textLengthToProcessMax = textLength - index;
-        int textLengthToProcess = length < 0 || length >= textLengthToProcessMax ? textLength : (length+index);
+        int textLengthToProcess = length < 0 || length >= textLengthToProcessMax ? textLength : (length + index);
 
         // remove spans throughout all text
         EmojiconSpan[] oldSpans = text.getSpans(0, textLength, EmojiconSpan.class);

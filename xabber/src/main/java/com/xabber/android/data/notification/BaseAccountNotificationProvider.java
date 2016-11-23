@@ -17,8 +17,7 @@ package com.xabber.android.data.notification;
 import java.util.Iterator;
 
 
-public class BaseAccountNotificationProvider<T extends AccountNotificationItem>
-        extends BaseNotificationProvider<T> implements
+public class BaseAccountNotificationProvider<T extends AccountNotificationItem> extends BaseNotificationProvider<T> implements
         AccountNotificationProvider<T> {
 
     public BaseAccountNotificationProvider(int icon) {

@@ -1,21 +1,18 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
 package com.xabber.android.data.connection;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import com.xabber.android.data.Application;
 import com.xabber.android.data.OnTimerListener;
@@ -23,8 +20,10 @@ import com.xabber.android.data.account.AccountItem;
 import com.xabber.android.data.account.AccountManager;
 import com.xabber.android.data.account.OnAccountRemovedListener;
 
-public class ReconnectionManager implements OnConnectionListener,
-        OnConnectedListener, OnAccountRemovedListener, OnTimerListener {
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+public class ReconnectionManager implements OnConnectionListener, OnConnectedListener, OnAccountRemovedListener, OnTimerListener {
 
     /**
      * Intervals in seconds to be used for attempt to reconnect. First value
@@ -32,12 +31,6 @@ public class ReconnectionManager implements OnConnectionListener,
      * fails. Last value will be used if there is no more values in array.
      */
     private final static int RECONNECT_AFTER[] = new int[]{2, 10, 30, 60};
-
-    /**
-     * Managed connections.
-     */
-    private final HashMap<ConnectionItem, ReconnectionInfo> connections;
-
     private final static ReconnectionManager instance;
 
     static {
@@ -45,12 +38,17 @@ public class ReconnectionManager implements OnConnectionListener,
         Application.getInstance().addManager(instance);
     }
 
-    public static ReconnectionManager getInstance() {
-        return instance;
-    }
+    /**
+     * Managed connections.
+     */
+    private final HashMap<ConnectionItem, ReconnectionInfo> connections;
 
     private ReconnectionManager(Application application) {
         connections = new HashMap<ConnectionItem, ReconnectionInfo>();
+    }
+
+    public static ReconnectionManager getInstance() {
+        return instance;
     }
 
     @Override

@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
@@ -84,10 +84,7 @@ public class ConferenceAdd extends ManagedActivity implements Toolbar.OnMenuItem
         barPainter.updateWithAccountName(account);
 
         if (savedInstanceState == null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fragment_container, ConferenceAddFragment.newInstance(account, room))
-                    .commit();
+            getFragmentManager().beginTransaction().add(R.id.fragment_container, ConferenceAddFragment.newInstance(account, room)).commit();
         }
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -103,8 +100,8 @@ public class ConferenceAdd extends ManagedActivity implements Toolbar.OnMenuItem
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add_conference:
-                ((ConferenceAddFragment)getFragmentManager().findFragmentById(R.id.fragment_container)).addConference();
+            case R.id.action_add_conference://加入会议
+                ((ConferenceAddFragment) getFragmentManager().findFragmentById(R.id.fragment_container)).addConference();
                 return true;
 
             default:

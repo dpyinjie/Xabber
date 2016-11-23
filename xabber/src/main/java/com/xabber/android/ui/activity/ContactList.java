@@ -154,9 +154,16 @@ public class ContactList extends ManagedActivity implements OnAccountChangedList
         return intent;
     }
 
+    /**
+     * 群聊邀请
+     *
+     * @param context
+     * @param account
+     * @param user
+     * @return
+     */
     public static Intent createMucInviteIntent(Context context, String account, String user) {
-        Intent intent = new EntityIntentBuilder(context, ContactList.class)
-                .setAccount(account).setUser(user).build();
+        Intent intent = new EntityIntentBuilder(context, ContactList.class).setAccount(account).setUser(user).build();
         intent.setAction(ACTION_INCOMING_MUC_INVITE);
         return intent;
     }
