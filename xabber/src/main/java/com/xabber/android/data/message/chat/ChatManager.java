@@ -228,8 +228,7 @@ public class ChatManager implements OnLoadListener, OnAccountRemovedListener {
      * @param user
      * @param save
      */
-    public void setSaveMessages(final String account, final String user,
-                                final boolean save) {
+    public void setSaveMessages(final String account, final String user, final boolean save) {
         if (save)
             privateChats.remove(account, user);
         else

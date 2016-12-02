@@ -108,8 +108,7 @@ public class ContextMenuHelper {
                 new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        MUCManager.getInstance().joinRoom(account,
-                                user, true);
+                        MUCManager.getInstance().joinRoom(account, user, true);
                         return true;
                     }
                 });

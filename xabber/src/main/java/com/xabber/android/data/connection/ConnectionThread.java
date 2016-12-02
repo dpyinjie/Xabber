@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
@@ -82,46 +82,30 @@ public class ConnectionThread implements
     private final AcceptAll ACCEPT_ALL = new AcceptAll();
 
     private final ConnectionItem connectionItem;
-
-    /**
-     * SMACK connection.
-     */
-    private AbstractXMPPConnection xmppConnection;
-
     /**
      * Thread holder for this connection.
      */
     private final ExecutorService executorService;
-
     private final AccountProtocol protocol;
-
     private final String serverName;
-
     private final String login;
-
     /**
      * Refresh token for OAuth or regular password.
      */
     private final String token;
-
     private final String resource;
-
     private final boolean saslEnabled;
-
     private final TLSMode tlsMode;
-
     private final boolean compression;
-
     private final ProxyType proxyType;
-
     private final String proxyHost;
-
     private final int proxyPort;
-
     private final String proxyUser;
-
     private final String proxyPassword;
-
+    /**
+     * SMACK connection.
+     */
+    private AbstractXMPPConnection xmppConnection;
     private boolean started;
 
     private boolean registerNewAccount;
@@ -131,18 +115,18 @@ public class ConnectionThread implements
 
         this.connectionItem = connectionItem;
         executorService = Executors.newSingleThreadExecutor(new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable runnable) {
-                        Thread thread = new Thread(
-                                runnable,
-                                "Connection thread for "
-                                        + (connectionItem instanceof AccountItem ? ((AccountItem) connectionItem)
-                                        .getAccount() : connectionItem));
-                        thread.setPriority(Thread.MIN_PRIORITY);
-                        thread.setDaemon(true);
-                        return thread;
-                    }
-                });
+            @Override
+            public Thread newThread(Runnable runnable) {
+                Thread thread = new Thread(
+                        runnable,
+                        "Connection thread for "
+                                + (connectionItem instanceof AccountItem ? ((AccountItem) connectionItem)
+                                .getAccount() : connectionItem));
+                thread.setPriority(Thread.MIN_PRIORITY);
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
         ConnectionManager.getInstance().onConnection(this);
         ConnectionSettings connectionSettings = connectionItem.getConnectionSettings();
         protocol = connectionSettings.getProtocol();
@@ -197,8 +181,7 @@ public class ConnectionThread implements
                 MemorizingTrustManager mtm = new MemorizingTrustManager(Application.getInstance());
                 sslContext.init(null, new X509TrustManager[]{mtm}, new java.security.SecureRandom());
                 builder.setCustomSSLContext(sslContext);
-                builder.setHostnameVerifier(
-                        mtm.wrapHostnameVerifier(new org.apache.http.conn.ssl.StrictHostnameVerifier()));
+                builder.setHostnameVerifier(mtm.wrapHostnameVerifier(new org.apache.http.conn.ssl.StrictHostnameVerifier()));
             } else {
                 TLSUtils.acceptAllCertificates(builder);
                 TLSUtils.disableHostnameVerificationForTlsCertificicates(builder);
@@ -216,7 +199,7 @@ public class ConnectionThread implements
         // by default Smack disconnects in case of parsing errors
         xmppConnection.setParsingExceptionCallback(new ExceptionLoggingCallback());
 
-        AccountRosterListener rosterListener = new AccountRosterListener(((AccountItem)connectionItem).getAccount());
+        AccountRosterListener rosterListener = new AccountRosterListener(((AccountItem) connectionItem).getAccount());
         final Roster roster = Roster.getInstanceFor(xmppConnection);
         roster.addRosterListener(rosterListener);
         roster.addRosterLoadedListener(rosterListener);
@@ -416,15 +399,14 @@ public class ConnectionThread implements
     private void onConnected(final String password) {
         connectionItem.onConnected(this);
         ConnectionManager.getInstance().onConnected(this);
-        if(registerNewAccount) {
+        if (registerNewAccount) {
             runOnConnectionThread(new Runnable() {
                 @Override
                 public void run() {
                     registerAccount(password);
                 }
             });
-        }
-        else {
+        } else {
             runOnConnectionThread(new Runnable() {
                 @Override
                 public void run() {
@@ -436,7 +418,7 @@ public class ConnectionThread implements
 
     /**
      * Register new account.
-     * 
+     *
      * @param password
      */
     private void registerAccount(final String password) {
@@ -461,7 +443,7 @@ public class ConnectionThread implements
 
     /**
      * New account has been registerd on the server.
-     * 
+     *
      * @param password
      */
     private void onAccountRegistered(final String password) {
@@ -613,18 +595,6 @@ public class ConnectionThread implements
     }
 
     /**
-     * Filter to accept all packets.
-     *
-     * @author alexander.ivanov
-     */
-    static class AcceptAll implements StanzaFilter {
-        @Override
-        public boolean accept(Stanza packet) {
-            return true;
-        }
-    }
-
-    /**
      * Start connection.
      * <p/>
      * This function can be called only once.
@@ -694,6 +664,18 @@ public class ConnectionThread implements
                 runnable.run();
             }
         });
+    }
+
+    /**
+     * Filter to accept all packets.
+     *
+     * @author alexander.ivanov
+     */
+    static class AcceptAll implements StanzaFilter {
+        @Override
+        public boolean accept(Stanza packet) {
+            return true;
+        }
     }
 
 }

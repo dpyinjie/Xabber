@@ -140,8 +140,7 @@ class PrivateChatTable extends AbstractEntityTable {
      */
     void remove(String account, String user) {
         SQLiteDatabase db = databaseManager.getWritableDatabase();
-        db.delete(NAME, Fields.ACCOUNT + " = ? AND " + Fields.USER + " = ?",
-                new String[]{account, user});
+        db.delete(NAME, Fields.ACCOUNT + " = ? AND " + Fields.USER + " = ?", new String[]{account, user});
     }
 
     @Override

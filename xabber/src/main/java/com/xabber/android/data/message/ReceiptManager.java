@@ -146,6 +146,7 @@ public class ReceiptManager implements OnPacketListener, OnDisconnectListener, R
 
     @Override
     public void onReceiptReceived(String fromJid, String toJid, String receiptId, Stanza stanza) {
+
         DeliveryReceipt receipt = stanza.getExtension(DeliveryReceipt.ELEMENT, DeliveryReceipt.NAMESPACE);
 
         if (receipt == null) {
