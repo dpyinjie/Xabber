@@ -57,11 +57,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
-import javax.net.ssl.X509TrustManager;
-
-import de.duenndns.ssl.MemorizingTrustManager;
 
 /**
  * Provides connection workflow.
@@ -176,16 +172,19 @@ public class ConnectionThread implements
         builder.setSendPresence(false);
 
         try {
-            if (SettingsManager.securityCheckCertificate()) {
-                SSLContext sslContext = SSLContext.getInstance("TLS");
-                MemorizingTrustManager mtm = new MemorizingTrustManager(Application.getInstance());
-                sslContext.init(null, new X509TrustManager[]{mtm}, new java.security.SecureRandom());
-                builder.setCustomSSLContext(sslContext);
-                builder.setHostnameVerifier(mtm.wrapHostnameVerifier(new org.apache.http.conn.ssl.StrictHostnameVerifier()));
-            } else {
-                TLSUtils.acceptAllCertificates(builder);
-                TLSUtils.disableHostnameVerificationForTlsCertificicates(builder);
-            }
+            TLSUtils.acceptAllCertificates(builder);
+            TLSUtils.disableHostnameVerificationForTlsCertificicates(builder);
+//
+//            if (SettingsManager.securityCheckCertificate()) {
+//                SSLContext sslContext = SSLContext.getInstance("TLS");
+//                MemorizingTrustManager mtm = new MemorizingTrustManager(Application.getInstance());
+//                sslContext.init(null, new X509TrustManager[]{mtm}, new java.security.SecureRandom());
+//                builder.setCustomSSLContext(sslContext);
+//                builder.setHostnameVerifier(mtm.wrapHostnameVerifier(new org.apache.http.conn.ssl.StrictHostnameVerifier()));
+//            } else {
+//                TLSUtils.acceptAllCertificates(builder);
+//                TLSUtils.disableHostnameVerificationForTlsCertificicates(builder);
+//            }
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             e.printStackTrace();
         }

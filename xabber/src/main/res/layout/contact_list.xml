@@ -15,31 +15,31 @@
 -->
 
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                                        android:id="@+id/drawer_layout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.Toolbar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar_default"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="?attr/toolbar_popup_theme"
-            app:titleTextAppearance="@style/ToolbarTitle" />
+            app:titleTextAppearance="@style/ToolbarTitle"/>
 
         <!-- Main layout -->
         <RelativeLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
     <!-- Nav drawer -->
@@ -48,6 +48,6 @@
         android:name="com.xabber.android.ui.fragment.ContactListDrawerFragment"
         android:layout_width="304dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left|start" />
+        android:layout_gravity="left|start"/>
 </android.support.v4.widget.DrawerLayout>
 

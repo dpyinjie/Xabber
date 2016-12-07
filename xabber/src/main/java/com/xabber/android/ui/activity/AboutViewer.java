@@ -32,6 +32,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.xabber.android.R;
 
+/**
+ *
+ */
 public class AboutViewer extends ManagedActivity implements View.OnClickListener {
 
     public static Intent createIntent(Context context) {

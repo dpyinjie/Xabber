@@ -556,6 +556,7 @@ public class ChatViewerFragment extends Fragment implements
     }
 
     private void sendMessage() {
+
         String text = inputView.getText().toString().trim();
 
         if (text.isEmpty()) {
