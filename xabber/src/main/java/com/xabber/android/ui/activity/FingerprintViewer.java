@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013, Redsolution LTD. All rights reserved.
- *
+ * <p>
  * This file is part of Xabber project; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License, Version 3.
- *
+ * <p>
  * Xabber is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License,
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
@@ -31,7 +31,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.xabber.android.R;
 import com.xabber.android.data.Application;
-import com.xabber.android.data.LogManager;
 import com.xabber.android.data.account.AccountManager;
 import com.xabber.android.data.account.OnAccountChangedListener;
 import com.xabber.android.data.entity.BaseEntity;
@@ -44,17 +43,9 @@ import com.xabber.android.data.roster.RosterManager;
 import com.xabber.android.ui.helper.ContactTitleActionBarInflater;
 import com.xabber.xmpp.address.Jid;
 
-import org.jivesoftware.smack.util.StringUtils;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
 import java.util.Collection;
 
-public class FingerprintViewer extends ManagedActivity implements
-        OnCheckedChangeListener, OnAccountChangedListener,
-        OnContactChangedListener, OnClickListener {
+public class FingerprintViewer extends ManagedActivity implements OnCheckedChangeListener, OnAccountChangedListener, OnContactChangedListener, OnClickListener {
 
     private static final String SAVED_REMOTE_FINGERPRINT = "com.xabber.android.ui.activity.FingerprintViewer.SAVED_REMOTE_FINGERPRINT";
     private static final String SAVED_LOCAL_FINGERPRINT = "com.xabber.android.ui.activity.FingerprintViewer.SAVED_LOCAL_FINGERPRINT";
@@ -77,8 +68,7 @@ public class FingerprintViewer extends ManagedActivity implements
     private IntentIntegrator integrator;
 
     public static Intent createIntent(Context context, String account, String user) {
-        return new EntityIntentBuilder(context, FingerprintViewer.class)
-                .setAccount(account).setUser(user).build();
+        return new EntityIntentBuilder(context, FingerprintViewer.class).setAccount(account).setUser(user).build();
     }
 
     private static String getAccount(Intent intent) {
@@ -87,6 +77,22 @@ public class FingerprintViewer extends ManagedActivity implements
 
     private static String getUser(Intent intent) {
         return EntityIntentBuilder.getUser(intent);
+    }
+
+    /**
+     * @param fingerprint
+     * @return Formatted fingerprint to be shown.
+     */
+    private static String showFingerprint(String fingerprint) {
+        if (fingerprint == null)
+            return null;
+        StringBuffer buffer = new StringBuffer();
+        for (int index = 0; index < fingerprint.length(); index++) {
+            if (index > 0 && index % 2 == 0)
+                buffer.append(':');
+            buffer.append(fingerprint.charAt(index));
+        }
+        return buffer.toString().toUpperCase();
     }
 
     @Override
@@ -209,7 +215,7 @@ public class FingerprintViewer extends ManagedActivity implements
         }
     }
 
-     @Override
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.scan:
@@ -244,22 +250,6 @@ public class FingerprintViewer extends ManagedActivity implements
         contactTitleActionBarInflater.update(abstractContact);
 
         isUpdating = false;
-    }
-
-    /**
-     * @param fingerprint
-     * @return Formatted fingerprint to be shown.
-     */
-    private static String showFingerprint(String fingerprint) {
-        if (fingerprint == null)
-            return null;
-        StringBuffer buffer = new StringBuffer();
-        for (int index = 0; index < fingerprint.length(); index++) {
-            if (index > 0 && index % 2 == 0)
-                buffer.append(':');
-            buffer.append(fingerprint.charAt(index));
-        }
-        return buffer.toString().toUpperCase();
     }
 
 }

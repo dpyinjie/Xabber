@@ -179,8 +179,7 @@ public class HttpFileUploadManager implements OnAuthorizedListener {
         });
     }
 
-    private void discoverSupport(XMPPConnection xmppConnection) throws
-            SmackException.NotConnectedException, XMPPException.XMPPErrorException, SmackException.NoResponseException {
+    private void discoverSupport(XMPPConnection xmppConnection) throws SmackException.NotConnectedException, XMPPException.XMPPErrorException, SmackException.NoResponseException {
 
         final String account = xmppConnection.getUser();
 
