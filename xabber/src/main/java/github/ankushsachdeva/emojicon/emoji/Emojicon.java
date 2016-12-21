@@ -22,10 +22,16 @@ import java.io.Serializable;
  * @author Hieu Rocker (rockerhieu@gmail.com)
  */
 public class Emojicon implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     private String emoji;
 
     private Emojicon() {
+    }
+
+    public Emojicon(String emoji) {
+        this.emoji = emoji;
     }
 
     public static Emojicon fromCodePoint(int codePoint) {
@@ -46,8 +52,12 @@ public class Emojicon implements Serializable {
         return emoji;
     }
 
-    public Emojicon(String emoji) {
-        this.emoji = emoji;
+    public static final String newString(int codePoint) {
+        if (Character.charCount(codePoint) == 1) {
+            return String.valueOf(codePoint);
+        } else {
+            return new String(Character.toChars(codePoint));
+        }
     }
 
     public String getEmoji() {
@@ -62,13 +72,5 @@ public class Emojicon implements Serializable {
     @Override
     public int hashCode() {
         return emoji.hashCode();
-    }
-
-    public static final String newString(int codePoint) {
-        if (Character.charCount(codePoint) == 1) {
-            return String.valueOf(codePoint);
-        } else {
-            return new String(Character.toChars(codePoint));
-        }
     }
 }
